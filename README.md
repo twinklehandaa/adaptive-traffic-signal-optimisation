@@ -1,182 +1,315 @@
-# Adaptive Traffic Signal Optimization — Working Project (Review-2)
 
-Real, runnable implementation of the CV + DQN adaptive traffic-signal
-controller described in the report, built and trained end to end.
+# 🚦 Adaptive Traffic Signal Optimization Using Deep Reinforcement Learning
 
-## What's real here
-- **SUMO network** (`network/`): a genuine 4-approach signalised intersection
-  built with netconvert, with realistic peak/off-peak demand (`routes.rou.xml`,
-  ~1600 vehicles per 40-minute run).
-- **CV perception** (`perception/perception.py`): OpenCV background-subtraction
-  detector running on rendered overhead frames — not a stub.
-- **RL environment** (`traffic_env.py`): Gym-style TraCI wrapper matching the
-  report's design (state, reward, min-green/yellow enforcement).
-- **DQN agent** (`dqn_agent.py`): implemented in pure NumPy (manual forward
-  pass, backprop, Adam) instead of PyTorch — PyTorch's CUDA dependency chain
-  didn't fit in the build sandbox's disk quota. Same architecture (2 hidden
-  layers, replay buffer, target network, epsilon-greedy) as the report's
-  reference PyTorch code in Section 11.2.3. Swap in `dqn_agent_torch.py`
-  later if you get a machine with more disk space / a GPU — the interface
-  (`act`, `remember`, `replay`, `save`, `load`) is identical so `train.py`
-  won't need to change.
-- **Baselines** (`baselines.py`): fixed-time (SUMO's native static program)
-  and a gap-based actuated controller, for the comparison in Fig. 11.6.
+An intelligent traffic management system that uses **Deep Reinforcement Learning (DQN)**, **SUMO traffic simulation**, and a **computer vision-based perception pipeline** to explore adaptive traffic signal control and traffic flow optimization.
 
-## Results from the run already completed
-- 120-episode training run: reward converges from ~600 to a stable ~800-860
-  (see `logs/reward_history.npy`, `logs/train_console.log`).
-- 3-seed comparison vs baselines (`logs/comparison_summary.json`): average
-  network waiting time drops from ~292s (fixed-time) / ~298s (actuated) to
-  ~19s under the trained DQN policy, with a lower average queue and slightly
-  higher throughput.
+## 📌 Overview
 
-## How to run it yourself
-```bash
-export SUMO_HOME=/usr/share/sumo   # adjust to your SUMO install
-python3 train.py                   # retrain from scratch (~22 min on 1 CPU core)
-python3 compare_baselines.py       # regenerate the baseline comparison + chart
-python3 plot_reward.py             # regenerate the reward-convergence plot
-```
-Needs: SUMO + TraCI/sumolib, numpy, opencv-python(-headless), matplotlib.
+Traditional traffic signals often use fixed timings that cannot always adapt to changing traffic conditions. This project explores an adaptive approach in which a Deep Q-Network (DQN) agent observes traffic conditions and decides whether to maintain or switch the current traffic signal phase.
 
-## Honest gaps to close before Review-3
-- Only 120 training episodes / 3 evaluation seeds so far — the project plan
-  correctly lists this as "substantially complete" / "in progress", not done.
-- No real (non-simulated) camera footage yet — vision runs on rendered SUMO
-  frames, as scoped in the report.
-- If you get PyTorch working on your own machine, porting `dqn_agent.py`
-  back to the Section 11.2.3 reference implementation is a quick swap.
+The system is developed using **Python and SUMO**, with support for single-intersection and multi-intersection experiments. It evaluates traffic performance using waiting-time metrics, queue lengths, and vehicle throughput.
 
-## Using a real intersection (OpenStreetMap import) instead of the synthetic one
-The files above (`traffic_env.py`, `baselines.py`, `train.py`) hardcode lane
-names like `N1_0` that only exist in the bundled synthetic network. To use
-a real intersection instead:
+## 🎯 Objectives
 
-1. **Generate a real network.** Run SUMO's built-in wizard:
-   `python "%SUMO_HOME%\tools\osmWebWizard.py"` (Windows) or
-   `python3 $SUMO_HOME/tools/osmWebWizard.py` (Linux/Mac). It opens a map in
-   your browser -- zoom to a real signalised intersection, draw a selection
-   box around it, click **Generate Scenario**. It downloads the real OSM
-   road data and writes a timestamped folder (e.g. `2024-xx-xx-.../`)
-   containing `osm.net.xml`, `osm.rou.xml`, `osm.sumocfg`, etc.
-2. **Use the *generic* pipeline** -- `traffic_env_generic.py`,
-   `baselines_generic.py`, `train_generic.py` -- instead of the hardcoded
-   ones. These auto-detect the traffic light, its lanes, and its green
-   phases from whatever network you point them at, so they work on the
-   real OSM network without editing any lane names:
-   ```
-   python3 train_generic.py path/to/osm.sumocfg
-   python3 -c "from baselines_generic import run_fixed_time, run_actuated; \
-       print(run_fixed_time('path/to/osm.sumocfg')); \
-       print(run_actuated('path/to/osm.sumocfg'))"
-   ```
-3. **Pick a fairly simple real intersection first** (a standard 4-way
-   signal with 2 main green phases works best) -- the auto-discovery
-   handles more complex multi-phase intersections too, but a simple one
-   is easier to sanity-check and debug the night before a review.
-4. I regression-tested `*_generic.py` against the bundled synthetic
-   network and it reproduces the same behaviour as the hardcoded version
-   (auto-detects TLS "J1", its 8 lanes, and 2 green phases correctly), but
-   I was not able to test it against a *real* downloaded OSM network
-   myself (no internet access to openstreetmap.org from the build
-   sandbox) -- so budget time to debug rough edges if you go this route
-   the night before a deadline.
+- Develop an adaptive traffic signal controller using Deep Reinforcement Learning.
+- Reduce vehicle waiting time and traffic queue lengths.
+- Improve traffic flow under varying traffic conditions.
+- Integrate a computer vision-based perception pipeline.
+- Extend traffic signal control to multiple intersections.
+- Compare the learned controller against conventional traffic signal strategies.
 
+## ✨ Key Features
 
-## Final before-vs-after result
+- 🧠 **DQN-Based Control:** Learns signal-control policies through interaction with the simulation.
+- 🚗 **SUMO Integration:** Simulates vehicles, road networks, and traffic signals.
+- 🔄 **Adaptive Signal Switching:** Chooses between holding and switching the current phase.
+- 👁️ **Computer Vision Pipeline:** Uses OpenCV-based synthetic frame processing and contour detection.
+- 🛣️ **Multi-Intersection Control:** Supports multiple DQN agents with neighbouring-intersection information.
+- 📊 **Performance Evaluation:** Tracks waiting-time metrics, queue lengths, throughput, and rewards.
+- 📈 **Baseline Comparisons:** Includes fixed-time and actuated control strategies.
+- 🌍 **OSM-Based Simulation:** Supports experiments using an OpenStreetMap-derived road network.
+- 📉 **Visualization Dashboard:** Provides visual access to simulation and evaluation outputs.
 
-The console demonstration ends with a quantitative comparison of the traffic
-conditions before and after DQN control:
-
-- Average waiting time
-- Average queue length
-- Absolute change
-- Percentage improvement
-
-The comparison uses the first 30 observed simulation steps as the **before**
-window and the final 30 controlled steps as the **after** window. The exact
-values are generated from the running SUMO simulation, not hard-coded.
-
-Example presentation output:
+## 🏗️ System Architecture
 
 ```text
-========================================================================================
- BEFORE vs AFTER - DQN IMPACT
-========================================================================================
-METRIC                           BEFORE          AFTER         CHANGE     IMPROVEMENT
---------------------------------------------------------------------------------------
-Average waiting time             18.42 s         11.37 s       -7.05 s          38.3%
-Average queue length               7.20            4.10         -3.10            43.1%
-========================================================================================
+Traffic Simulation (SUMO)
+          |
+          v
+Traffic State Observation
+          |
+          v
+Computer Vision / Perception Pipeline
+          |
+          v
+DQN Agent
+          |
+          v
+Action Selection
+(Hold / Switch)
+          |
+          v
+Traffic Signal Controller
+          |
+          v
+Reward Calculation
+          |
+          v
+Experience Replay & DQN Training
+          |
+          v
+Performance Evaluation
 ```
 
+The process repeats across simulation steps and training episodes, allowing the agent to learn a traffic signal control policy.
 
-### Important run order
+## 🧠 Methodology
 
-The console demo runs the fixed-time baseline first and waits for that SUMO/TraCI connection to close. Only then is the DQN environment started. This avoids TraCI's `Connection 'default' is already active` error.
+### 1. Deep Q-Network (DQN)
 
+The project uses a Deep Q-Network to estimate the expected cumulative reward associated with each possible action in a given traffic state.
 
-## Multiple intersections (multi-agent extension)
+The implementation includes:
 
-The project now also controls **several signalised intersections at once**,
-with one DQN agent per intersection, all running inside one shared SUMO
-simulation so each agent's decisions affect its neighbours' traffic.
+- A neural network with two hidden layers.
+- ReLU activation functions.
+- Experience replay.
+- A target network for more stable learning.
+- Epsilon-greedy exploration.
 
-### New files
-| File | What it does |
+### 2. State Space
+
+The single-intersection state includes traffic-related features such as:
+
+- Vehicle counts on approach lanes.
+- Queue estimates on approach lanes.
+- Current traffic signal phase.
+- Normalized phase duration.
+
+The multi-intersection implementation additionally incorporates neighbouring-signal information.
+
+### 3. Action Space
+
+The controller supports two actions:
+
+| Action | Description |
 |---|---|
-| `make_multi_network.py` | Builds an N×M grid of signals with `netgenerate` (default 2×2 = 4 signals) plus time-varying demand with a heavy peak corridor. Writes `network_multi/grid.sumocfg`. |
-| `traffic_env_multi.py` | `MultiTrafficEnv`: auto-discovers **every** traffic light (same `discover_intersection()` as the generic env), gives each its own CV `LaneDetector`, phase state machine, local reward, and a neighbour block in its state. |
-| `train_multi.py` | Independent DQN (one `DQNAgent` per signal, unchanged class). Saves `checkpoints/multi/dqn_<TLS>.npz` + `meta.json`, and the best late episode to `checkpoints/multi_best/`. |
-| `baselines_multi.py` | Fixed-time vs actuated vs DQN on the whole network, network-wide and per intersection. Writes `logs/multi_comparison_summary.json` and `screens/multi_comparison.png`. |
-| `console_multi_demo.py` | Console CV → DQN → actuation demo: one row per intersection per step, then a before/after table (network + per intersection). `--focus A0` adds the full per-lane / reward breakdown for one junction. |
+| **Hold** | Maintain the current signal phase. |
+| **Switch** | Transition to the next permitted signal phase. |
 
-### Design
-- **State per agent** = the single-intersection state (lane counts, lane queues,
-  phase one-hot, phase timer) + a yellow flag + for up to 4 neighbouring
-  signals: their normalised queue and current phase. Neighbours are found
-  automatically: two signals are neighbours if a lane of one starts at a
-  junction of the other.
-- **Reward per agent** = the same formula as before on its own lanes,
-  plus `--neighbour-weight` × the mean of its neighbours' rewards (default 0.1),
-  so an agent is discouraged from flushing its queue into the next junction.
-- **Non-blocking yellow**: the single env advances SUMO 3 s during a yellow;
-  with many signals that would freeze everyone, so here each signal has its
-  own yellow countdown and the simulation always advances 1 s per step.
-- **Phase holding**: after every `setPhase` the env calls
-  `setPhaseDuration(tls, 1e6)` so SUMO's own static program can never
-  auto-advance a phase behind the agent's back.
+Signal switching incorporates configured minimum-green and yellow-light constraints.
 
-### Run order
-```bash
-python3 make_multi_network.py                 # or --nx 3 --ny 1 for a 3-signal arterial
-python3 train_multi.py --fast                 # 120 episodes, ~25 min on 1 core
-python3 baselines_multi.py                    # fixed vs actuated vs DQN, 3 seeds
-python3 console_multi_demo.py --focus A0      # presentation demo
+### 4. Reward Function
+
+The single-intersection environment uses the following reward formulation:
+
+\[
+r_t = -(W_t-W_{t-1}) - 0.25Q_t + 0.10V_t
+\]
+
+Where:
+
+- \(W_t\): Aggregate lane waiting-time measure at the current step.
+- \(W_{t-1}\): Corresponding measure at the previous step.
+- \(Q_t\): Number of halting vehicles.
+- \(V_t\): Number of vehicles on the relevant lanes.
+
+The reward penalizes increases in waiting time and larger queues while adding a positive contribution based on vehicle presence.
+
+### 5. Multi-Intersection Extension
+
+The project includes a multi-intersection implementation in which separate DQN agents control individual intersections. Neighbouring-intersection information can be incorporated into the state representation, with optional neighbour-reward mixing.
+
+This setup explores decentralized traffic control. However, independent agents do not guarantee globally optimal coordination, and performance depends on training and reward design.
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Core implementation |
+| SUMO | Microscopic traffic simulation |
+| TraCI | Python-SUMO communication |
+| NumPy | Numerical computation |
+| PyTorch / neural-network implementation | DQN computation, depending on the selected module |
+| OpenCV | Image processing and perception |
+| Matplotlib | Training plots and visualizations |
+| HTML, CSS, JavaScript | Dashboard interface |
+| OpenStreetMap | Geographic road-network data |
+
+## 📂 Project Structure
+
+```text
+traffic_project_multi/
+├── checkpoints/
+│   ├── multi/
+│   └── multi_best/
+├── logs/
+├── network/
+├── network_multi/
+├── osm_real/
+├── perception/
+├── baselines.py
+├── baselines_generic.py
+├── baselines_multi.py
+├── build_dashboard.py
+├── compare_baselines.py
+├── compare_baselines_generic.py
+├── console_multi_demo.py
+├── console_pipeline_demo.py
+├── dqn_agent.py
+├── make_multi_network.py
+└── dashboard.html
 ```
-`--fast` skips drawing CV frames during training only; the counts/queues fed to
-the agent are computed by the same rule, so the state is identical. The demo
-always runs the full CV rendering.
 
-### Results (2x2 grid, 1200 s, 3 seeds, logs/multi_comparison_summary.json)
-| Controller | Network avg wait | Avg queue | Arrived |
-|---|---|---|---|
-| Fixed-time, network default 42 s greens | 439.8 s | 27.6 | 1090 |
-| Fixed-time, 10 s greens (tuned on held-out seed) | 51.6 s | 11.1 | 1136 |
-| Actuated (gap-out) | 537.2 s | 31.0 | 1064 |
-| DQN, one agent per signal | 55.7 s | 10.8 | 1132 |
+Additional environment and training scripts are included in the project.
 
-The DQN agents beat the default fixed-time and actuated controllers by a wide
-margin, but a short, well-tuned fixed cycle is about as good (slightly better
-on wait, slightly worse on queue). The DQN is behind mainly at A0, where both
-peak corridors cross. Report against the tuned baseline, not only the default.
+### Main Components
 
-### Real multi-signal OSM area
-Select a box with several signals in `osmWebWizard.py`, then:
+| Component | Description |
+|---|---|
+| `dqn_agent.py` | DQN agent and learning logic |
+| `baselines.py` | Baseline traffic control strategies |
+| `baselines_generic.py` | Generic baseline controller logic |
+| `baselines_multi.py` | Multi-intersection baseline strategies |
+| `compare_baselines.py` | Single-intersection evaluation |
+| `compare_baselines_generic.py` | Generic-network comparisons |
+| `build_dashboard.py` | Dashboard generation |
+| `console_multi_demo.py` | Multi-intersection console demonstration |
+| `console_pipeline_demo.py` | Traffic-control pipeline demonstration |
+| `network/` | Single-intersection SUMO network |
+| `network_multi/` | Multi-intersection SUMO network |
+| `osm_real/` | OSM-derived simulation files |
+| `checkpoints/` | Saved model parameters |
+| `logs/` | Experiment summaries and training histories |
+
+## ⚙️ Installation
+
+### Prerequisites
+
+- Python 3.10 or a compatible version.
+- [SUMO](https://sumo.dlr.de/docs/).
+- TraCI Python interface.
+- Required Python libraries.
+
+Ensure that SUMO is installed and its executable tools are available through your system PATH.
+
+### 1. Clone the Repository
+
 ```bash
-python3 train_multi.py path/to/osm.sumocfg --fast
-python3 baselines_multi.py path/to/osm.sumocfg
-python3 console_multi_demo.py path/to/osm.sumocfg
+git clone <YOUR_REPOSITORY_URL>
+cd traffic_project_multi
 ```
-Signals with fewer than two green phases (e.g. pedestrian-only lights) are
-skipped automatically and listed at start-up.
+
+Replace `<YOUR_REPOSITORY_URL>` with your repository URL.
+
+### 2. Create a Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+**Windows:**
+
+```bash
+.venv\Scripts\activate
+```
+
+**Linux / macOS:**
+
+```bash
+source .venv/bin/activate
+```
+
+### 3. Install Dependencies
+
+Install the required packages used by the project:
+
+```bash
+pip install numpy matplotlib opencv-python
+```
+
+Install the appropriate PyTorch and SUMO/TraCI dependencies required by your selected scripts.
+
+> **Note:** Use dependency versions verified against your local project setup. A `requirements.txt` file should be maintained for reproducible installation.
+
+## ▶️ Running the Project
+
+The repository contains scripts for training, demonstrations, and baseline comparisons.
+
+The general workflow is:
+
+1. Configure the SUMO network and traffic demand.
+2. Start the appropriate simulation environment.
+3. Run the single-intersection or multi-intersection training workflow.
+4. Save and load the trained agent checkpoint.
+5. Run the relevant demonstration or evaluation script.
+6. Inspect the experiment summaries, plots, and dashboard.
+
+The repository also includes an OSM-derived simulation configuration in `osm_real/`.
+
+> **Note:** Verify the available training script names and their arguments in your current repository version before execution. SUMO must be correctly installed and configured.
+
+## 📊 Evaluation Metrics
+
+The project evaluates traffic performance using the following metrics:
+
+- **Waiting Time:** Measures vehicle delay according to the environment's configured metric.
+- **Queue Length:** Measures the extent of traffic queues.
+- **Throughput:** Uses arrived-vehicle counts or another explicitly defined traffic-flow measure.
+- **Cumulative Reward:** Helps track learning progress during training.
+
+Lower waiting-time and queue metrics generally indicate better performance, while higher throughput can indicate improved traffic flow when evaluation conditions are comparable.
+
+## 📈 Experimental Results
+
+The repository contains comparison summaries for:
+
+- Single-intersection traffic control.
+- An OpenStreetMap-derived road network.
+- Multi-intersection traffic control.
+
+The recorded results vary across scenarios and metrics. The DQN controller shows promising results in some experiments but does **not** outperform every baseline in every scenario.
+
+For example, in the recorded OSM comparison, DQN achieves a lower average queue than the native actuated controller, while the actuated controller records a lower waiting-time metric and higher throughput.
+
+The multi-intersection results also indicate scope for further tuning and evaluation.
+
+For reliable conclusions, comparisons should use equivalent traffic demand, simulation duration, random seeds, and metric definitions. Repeated trials are needed to measure variability.
+
+## ⚠️ Limitations
+
+- The system has primarily been evaluated in simulation.
+- The current perception pipeline uses simulator-derived vehicle information for final lane-level counts and queue classifications.
+- Independent multi-agent control does not guarantee globally optimal coordination.
+- Real-world deployment requires additional safety engineering and validation.
+
+
+## 🚀 Future Scope
+
+- Integrate a trained object-detection model for image-based vehicle counting.
+- Validate the perception pipeline using real traffic camera footage.
+- Improve reward design and hyperparameter tuning.
+- Compare DQN with algorithms such as PPO.
+- Explore advanced multi-agent reinforcement learning approaches.
+- Evaluate performance under varying traffic demand and network configurations.
+- Add pedestrian-aware control and emergency vehicle prioritization.
+- Conduct repeated experiments and statistical significance analysis.
+- Investigate real-world deployment requirements.
+
+## 🌐 Applications
+
+Potential research applications include:
+
+- Intelligent Transportation Systems (ITS).
+- Adaptive traffic signal control.
+- Smart city infrastructure.
+- Reinforcement learning for transportation.
+- Multi-intersection traffic management.
+- Simulation-based traffic optimization.
+
+## 📝 Conclusion
+
+This project explores Deep Reinforcement Learning for adaptive traffic signal optimization. By combining SUMO-based traffic simulation, DQN-based decision-making, a modular perception pipeline, and multi-intersection experiments, it provides a framework for studying data-driven traffic signal control.
+
+The results demonstrate both the potential and the limitations of reinforcement learning for traffic management. Improvements in perception, coordination, evaluation, and real-world validation are necessary before practical deployment.
+
