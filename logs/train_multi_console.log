@@ -1,0 +1,161 @@
+Training on: network_multi/grid.sumocfg
+ Retrying in 1 seconds
+[env] controlling 4 intersections:
+      A0           lanes=8   green phases=[0, 2]  neighbours=['A1', 'B0']
+      A1           lanes=8   green phases=[0, 2]  neighbours=['A0', 'B1']
+      B0           lanes=8   green phases=[0, 2]  neighbours=['A0', 'B1']
+      B1           lanes=8   green phases=[0, 2]  neighbours=['A1', 'B0']
+ Retrying in 1 seconds
+Episode   1 | network wait     62.4 | arrived 1086 | eps 0.975 | A0:    844  A1:    631  B0:    279  B1:    466 |     11s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode   5 | network wait     53.4 | arrived 1090 | eps 0.881 | A0:    820  A1:    758  B0:    517  B1:    505 |     53s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f22.32' performs emergency braking on lane ':B0_1_1' with decel=9.00, wished=4.50, severity=1.00, time=625.00.
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  10 | network wait     61.3 | arrived 1062 | eps 0.776 | A0:    956  A1:    646  B0:    260  B1:    488 |    105s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  15 | network wait     59.6 | arrived 1080 | eps 0.684 | A0:    680  A1:    685  B0:    582  B1:    563 |    155s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  20 | network wait     57.8 | arrived 1089 | eps 0.603 | A0:    901  A1:    689  B0:    535  B1:    528 |    206s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  25 | network wait     57.6 | arrived 1084 | eps 0.531 | A0:    961  A1:    645  B0:    573  B1:    524 |    257s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  30 | network wait     58.3 | arrived 1071 | eps 0.468 | A0:    811  A1:    672  B0:    634  B1:    573 |    308s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  35 | network wait     60.7 | arrived 1079 | eps 0.412 | A0:    876  A1:    644  B0:    596  B1:    496 |    358s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f41.5' performs emergency braking on lane ':B0_1_1' with decel=9.00, wished=4.50, severity=1.00, time=917.00.
+ Retrying in 1 seconds
+Episode  40 | network wait     54.9 | arrived 1089 | eps 0.363 | A0:    980  A1:    635  B0:    575  B1:    505 |    409s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f7.26' performs emergency braking on lane ':A0_13_1' with decel=9.00, wished=4.50, severity=1.00, time=368.00.
+ Retrying in 1 seconds
+Episode  45 | network wait     52.8 | arrived 1091 | eps 0.320 | A0:    924  A1:    727  B0:    589  B1:    522 |    459s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  50 | network wait     55.7 | arrived 1084 | eps 0.282 | A0:    863  A1:    718  B0:    564  B1:    558 |    509s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  55 | network wait     55.6 | arrived 1085 | eps 0.248 | A0:    856  A1:    692  B0:    560  B1:    518 |    559s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f43.77' performs emergency braking on lane 'A1A0_1' with decel=9.00, wished=4.50, severity=1.00, time=1034.00.
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  60 | network wait     51.6 | arrived 1092 | eps 0.219 | A0:    898  A1:    708  B0:    587  B1:    551 |    609s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  65 | network wait     44.8 | arrived 1096 | eps 0.193 | A0:    949  A1:    721  B0:    694  B1:    558 |    658s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f35.3' performs emergency braking on lane ':A1_13_1' with decel=9.00, wished=4.50, severity=1.00, time=940.00.
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  70 | network wait     50.6 | arrived 1091 | eps 0.170 | A0:    939  A1:    746  B0:    585  B1:    540 |    708s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  75 | network wait     53.9 | arrived 1092 | eps 0.150 | A0:    846  A1:    726  B0:    650  B1:    517 |    759s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  80 | network wait     55.6 | arrived 1088 | eps 0.132 | A0:    795  A1:    714  B0:    652  B1:    531 |    809s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  85 | network wait     48.8 | arrived 1090 | eps 0.116 | A0:    945  A1:    705  B0:    644  B1:    519 |    858s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f41.2' performs emergency braking on lane 'B1B0_1' with decel=9.00, wished=4.50, severity=1.00, time=789.00.
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  90 | network wait     46.1 | arrived 1099 | eps 0.102 | A0:    960  A1:    754  B0:    639  B1:    545 |    909s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f41.2' performs emergency braking on lane 'B1B0_1' with decel=9.00, wished=4.50, severity=1.00, time=783.00.
+Episode  95 | network wait     54.0 | arrived 1082 | eps 0.090 | A0:    798  A1:    637  B0:    641  B1:    568 |    959s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode 100 | network wait     52.3 | arrived 1082 | eps 0.080 | A0:    893  A1:    729  B0:    607  B1:    572 |   1010s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode 105 | network wait     48.0 | arrived 1091 | eps 0.070 | A0:    895  A1:    748  B0:    636  B1:    520 |   1061s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode 110 | network wait     44.9 | arrived 1092 | eps 0.062 | A0:    972  A1:    778  B0:    598  B1:    523 |   1112s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f41.5' performs emergency braking on lane 'B1B0_1' with decel=9.00, wished=4.50, severity=1.00, time=916.00.
+ Retrying in 1 seconds
+Episode 115 | network wait     48.1 | arrived 1092 | eps 0.054 | A0:    924  A1:    709  B0:    638  B1:    534 |   1162s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode 120 | network wait     49.1 | arrived 1100 | eps 0.050 | A0:    958  A1:    736  B0:    599  B1:    566 |   1212s
+Training complete. Checkpoints in checkpoints/multi/ (best-episode copy in checkpoints/multi_best/)

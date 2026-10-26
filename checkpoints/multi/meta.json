@@ -1,0 +1,35 @@
+{
+  "sumo_cfg": "network_multi/grid.sumocfg",
+  "tls_ids": [
+    "A0",
+    "A1",
+    "B0",
+    "B1"
+  ],
+  "state_dims": {
+    "A0": 28,
+    "A1": 28,
+    "B0": 28,
+    "B1": 28
+  },
+  "neighbours": {
+    "A0": [
+      "A1",
+      "B0"
+    ],
+    "A1": [
+      "A0",
+      "B1"
+    ],
+    "B0": [
+      "A0",
+      "B1"
+    ],
+    "B1": [
+      "A1",
+      "B0"
+    ]
+  },
+  "neighbour_weight": 0.1,
+  "episodes": 120
+}

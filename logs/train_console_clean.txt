@@ -1,0 +1,12 @@
+$ python3 train.py
+Loading net-file from 'network/intersection.net.xml' ... done.
+Loading route-files from 'network/routes.rou.xml' ... done.
+Episode   1 | reward     614.8 | avg10     614.8 | eps 0.975 | wait     32.0 | elapsed   11.5s
+Episode  10 | reward     538.6 | avg10     577.0 | eps 0.776 | wait    152.0 | elapsed  112.8s
+Episode  30 | reward     728.5 | avg10     720.7 | eps 0.468 | wait     73.0 | elapsed  338.3s
+Episode  50 | reward     819.8 | avg10     806.9 | eps 0.282 | wait      4.0 | elapsed  561.0s
+Episode  70 | reward     828.9 | avg10     785.6 | eps 0.170 | wait      3.0 | elapsed  769.9s
+Episode  95 | reward     838.3 | avg10     845.9 | eps 0.090 | wait      2.0 | elapsed 1017.2s
+Episode 115 | reward     807.9 | avg10     803.5 | eps 0.054 | wait     60.0 | elapsed 1228.3s
+Episode 120 | reward     811.9 | avg10     840.4 | eps 0.050 | wait     50.0 | elapsed 1288.0s
+Training complete. Checkpoint saved to checkpoints/dqn_latest.npz

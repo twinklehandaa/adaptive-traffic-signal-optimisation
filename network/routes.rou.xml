@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    <vType id="car" accel="2.6" decel="4.5" sigma="0.5" length="5" minGap="2.5" maxSpeed="16.6"/>
+
+    <route id="N_S" edges="N1 S1o"/>
+    <route id="N_E" edges="N1 E1o"/>
+    <route id="N_W" edges="N1 W1o"/>
+
+    <route id="S_N" edges="S1 N1o"/>
+    <route id="S_E" edges="S1 E1o"/>
+    <route id="S_W" edges="S1 W1o"/>
+
+    <route id="E_W" edges="E1 W1o"/>
+    <route id="E_N" edges="E1 N1o"/>
+    <route id="E_S" edges="E1 S1o"/>
+
+    <route id="W_E" edges="W1 E1o"/>
+    <route id="W_N" edges="W1 N1o"/>
+    <route id="W_S" edges="W1 S1o"/>
+
+    <!-- Off-peak: 0-600s, moderate flow -->
+    <flow id="f1" type="car" route="N_S" begin="0" end="600" probability="0.12" departSpeed="max"/>
+    <flow id="f2" type="car" route="S_N" begin="0" end="600" probability="0.12" departSpeed="max"/>
+    <flow id="f3" type="car" route="E_W" begin="0" end="600" probability="0.10" departSpeed="max"/>
+    <flow id="f4" type="car" route="W_E" begin="0" end="600" probability="0.10" departSpeed="max"/>
+    <flow id="f5" type="car" route="N_E" begin="0" end="600" probability="0.04" departSpeed="max"/>
+    <flow id="f6" type="car" route="S_W" begin="0" end="600" probability="0.04" departSpeed="max"/>
+
+    <!-- Peak: 600-1800s, heavy N-S demand (asymmetric, forces adaptive behaviour) -->
+    <flow id="f7" type="car" route="N_S" begin="600" end="1800" probability="0.35" departSpeed="max"/>
+    <flow id="f8" type="car" route="S_N" begin="600" end="1800" probability="0.30" departSpeed="max"/>
+    <flow id="f9" type="car" route="E_W" begin="600" end="1800" probability="0.08" departSpeed="max"/>
+    <flow id="f10" type="car" route="W_E" begin="600" end="1800" probability="0.08" departSpeed="max"/>
+    <flow id="f11" type="car" route="N_W" begin="600" end="1800" probability="0.05" departSpeed="max"/>
+    <flow id="f12" type="car" route="E_N" begin="600" end="1800" probability="0.05" departSpeed="max"/>
+
+    <!-- Off-peak tail: 1800-2400s -->
+    <flow id="f13" type="car" route="N_S" begin="1800" end="2400" probability="0.10" departSpeed="max"/>
+    <flow id="f14" type="car" route="S_N" begin="1800" end="2400" probability="0.10" departSpeed="max"/>
+    <flow id="f15" type="car" route="E_W" begin="1800" end="2400" probability="0.10" departSpeed="max"/>
+    <flow id="f16" type="car" route="W_E" begin="1800" end="2400" probability="0.10" departSpeed="max"/>
+</routes>

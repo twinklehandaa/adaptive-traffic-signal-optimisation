@@ -1,0 +1,154 @@
+ Retrying in 1 seconds
+Episode   1 | reward     614.8 | avg10     614.8 | eps 0.975 | wait     32.0 | elapsed   11.5s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f3.16' performs emergency braking on lane ':J1_5_1' with decel=9.00, wished=4.50, severity=1.00, time=262.00.
+ Retrying in 1 seconds
+Episode   5 | reward     574.9 | avg10     556.2 | eps 0.881 | wait    126.0 | elapsed   56.9s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f4.60' performs emergency braking on lane 'W1_1' with decel=9.00, wished=4.50, severity=1.00, time=553.00.
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  10 | reward     538.6 | avg10     577.0 | eps 0.776 | wait    152.0 | elapsed  112.8s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  15 | reward     817.7 | avg10     615.8 | eps 0.684 | wait      6.0 | elapsed  182.0s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  20 | reward     702.9 | avg10     691.0 | eps 0.603 | wait     70.0 | elapsed  232.7s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f3.14' performs emergency braking on lane ':J1_5_1' with decel=9.00, wished=4.50, severity=1.00, time=234.00.
+Warning: Vehicle 'f3.16' performs emergency braking on lane ':J1_5_1' with decel=9.00, wished=4.50, severity=1.00, time=262.00.
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  25 | reward     707.2 | avg10     732.0 | eps 0.531 | wait    100.0 | elapsed  287.1s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  30 | reward     728.5 | avg10     720.7 | eps 0.468 | wait     73.0 | elapsed  338.3s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  35 | reward     863.4 | avg10     746.0 | eps 0.412 | wait     64.0 | elapsed  396.2s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f4.40' performs emergency braking on lane ':J1_13_1' with decel=9.00, wished=4.50, severity=1.00, time=391.00.
+Episode  40 | reward     816.9 | avg10     760.8 | eps 0.363 | wait     13.0 | elapsed  449.9s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  45 | reward     789.3 | avg10     789.1 | eps 0.320 | wait      4.0 | elapsed  504.2s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f10.2' performs emergency braking on lane ':J1_13_1' with decel=9.00, wished=4.50, severity=1.00, time=703.00.
+ Retrying in 1 seconds
+Episode  50 | reward     819.8 | avg10     806.9 | eps 0.282 | wait      4.0 | elapsed  561.0s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  55 | reward     805.8 | avg10     796.4 | eps 0.248 | wait     38.0 | elapsed  615.3s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  60 | reward     780.3 | avg10     795.5 | eps 0.219 | wait     63.0 | elapsed  664.5s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  65 | reward     716.4 | avg10     774.5 | eps 0.193 | wait     94.0 | elapsed  717.6s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f4.39' performs emergency braking on lane ':J1_13_1' with decel=9.00, wished=4.50, severity=1.00, time=375.00.
+Episode  70 | reward     828.9 | avg10     785.6 | eps 0.170 | wait      3.0 | elapsed  769.9s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  75 | reward     790.1 | avg10     818.5 | eps 0.150 | wait     81.0 | elapsed  821.2s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  80 | reward     828.7 | avg10     814.6 | eps 0.132 | wait     21.0 | elapsed  869.9s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Warning: Vehicle 'f4.29' performs emergency braking on lane ':J1_13_1' with decel=9.00, wished=4.50, severity=1.00, time=286.00.
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  85 | reward     764.6 | avg10     791.6 | eps 0.116 | wait     62.0 | elapsed  917.2s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  90 | reward     902.8 | avg10     815.3 | eps 0.102 | wait      8.0 | elapsed  967.8s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode  95 | reward     838.3 | avg10     845.9 | eps 0.090 | wait      2.0 | elapsed 1017.2s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode 100 | reward     866.7 | avg10     856.0 | eps 0.080 | wait      6.0 | elapsed 1066.7s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode 105 | reward     832.7 | avg10     862.5 | eps 0.070 | wait     60.0 | elapsed 1115.6s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode 110 | reward     824.2 | avg10     814.1 | eps 0.062 | wait     57.0 | elapsed 1168.8s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode 115 | reward     807.9 | avg10     803.5 | eps 0.054 | wait     60.0 | elapsed 1228.3s
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+ Retrying in 1 seconds
+Episode 120 | reward     811.9 | avg10     840.4 | eps 0.050 | wait     50.0 | elapsed 1288.0s
+Training complete. Checkpoint saved to checkpoints/dqn_latest.npz

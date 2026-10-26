@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    <vType id="car" accel="2.6" decel="4.5" sigma="0.5" length="5" minGap="2.5" maxSpeed="16.6"/>
+
+    <!-- 0-600s -->
+    <flow id="f1" type="car" from="bottom0A0" to="A1top0" begin="0" end="600" probability="0.070" departLane="best" departSpeed="max"/>
+    <flow id="f2" type="car" from="bottom0A0" to="A0left0" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f3" type="car" from="bottom0A0" to="B1top1" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f4" type="car" from="bottom1B0" to="B1top1" begin="0" end="600" probability="0.050" departLane="best" departSpeed="max"/>
+    <flow id="f5" type="car" from="bottom1B0" to="A1top0" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f6" type="car" from="bottom1B0" to="A1left1" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f7" type="car" from="left0A0" to="B0right0" begin="0" end="600" probability="0.070" departLane="best" departSpeed="max"/>
+    <flow id="f8" type="car" from="left0A0" to="A1top0" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f9" type="car" from="left0A0" to="B1top1" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f10" type="car" from="left1A1" to="B1right1" begin="0" end="600" probability="0.050" departLane="best" departSpeed="max"/>
+    <flow id="f11" type="car" from="left1A1" to="A0bottom0" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f12" type="car" from="left1A1" to="B1top1" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f13" type="car" from="right0B0" to="A0left0" begin="0" end="600" probability="0.070" departLane="best" departSpeed="max"/>
+    <flow id="f14" type="car" from="right0B0" to="B1top1" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f15" type="car" from="right0B0" to="B0bottom1" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f16" type="car" from="right1B1" to="A1left1" begin="0" end="600" probability="0.050" departLane="best" departSpeed="max"/>
+    <flow id="f17" type="car" from="right1B1" to="A0bottom0" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f18" type="car" from="right1B1" to="B1top1" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f19" type="car" from="top0A1" to="A0bottom0" begin="0" end="600" probability="0.070" departLane="best" departSpeed="max"/>
+    <flow id="f20" type="car" from="top0A1" to="A0left0" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f21" type="car" from="top0A1" to="A1left1" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f22" type="car" from="top1B1" to="B0bottom1" begin="0" end="600" probability="0.050" departLane="best" departSpeed="max"/>
+    <flow id="f23" type="car" from="top1B1" to="A0left0" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f24" type="car" from="top1B1" to="A0bottom0" begin="0" end="600" probability="0.015" departLane="best" departSpeed="max"/>
+
+    <!-- 600-1800s -->
+    <flow id="f25" type="car" from="bottom0A0" to="A1top0" begin="600" end="1800" probability="0.200" departLane="best" departSpeed="max"/>
+    <flow id="f26" type="car" from="bottom0A0" to="B1top1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f27" type="car" from="bottom0A0" to="A1left1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f28" type="car" from="bottom1B0" to="B1top1" begin="600" end="1800" probability="0.040" departLane="best" departSpeed="max"/>
+    <flow id="f29" type="car" from="bottom1B0" to="B1right1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f30" type="car" from="bottom1B0" to="B0right0" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f31" type="car" from="left0A0" to="B0right0" begin="600" end="1800" probability="0.200" departLane="best" departSpeed="max"/>
+    <flow id="f32" type="car" from="left0A0" to="A1top0" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f33" type="car" from="left0A0" to="B1right1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f34" type="car" from="left1A1" to="B1right1" begin="600" end="1800" probability="0.040" departLane="best" departSpeed="max"/>
+    <flow id="f35" type="car" from="left1A1" to="B1top1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f36" type="car" from="left1A1" to="B0bottom1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f37" type="car" from="right0B0" to="A0left0" begin="600" end="1800" probability="0.200" departLane="best" departSpeed="max"/>
+    <flow id="f38" type="car" from="right0B0" to="A0bottom0" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f39" type="car" from="right0B0" to="A1left1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f40" type="car" from="right1B1" to="A1left1" begin="600" end="1800" probability="0.040" departLane="best" departSpeed="max"/>
+    <flow id="f41" type="car" from="right1B1" to="B0bottom1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f42" type="car" from="right1B1" to="A1top0" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f43" type="car" from="top0A1" to="A0bottom0" begin="600" end="1800" probability="0.200" departLane="best" departSpeed="max"/>
+    <flow id="f44" type="car" from="top0A1" to="B0bottom1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f45" type="car" from="top0A1" to="A1left1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f46" type="car" from="top1B1" to="B0bottom1" begin="600" end="1800" probability="0.040" departLane="best" departSpeed="max"/>
+    <flow id="f47" type="car" from="top1B1" to="A0left0" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+    <flow id="f48" type="car" from="top1B1" to="A1left1" begin="600" end="1800" probability="0.020" departLane="best" departSpeed="max"/>
+
+    <!-- 1800-2400s -->
+    <flow id="f49" type="car" from="bottom0A0" to="A1top0" begin="1800" end="2400" probability="0.060" departLane="best" departSpeed="max"/>
+    <flow id="f50" type="car" from="bottom0A0" to="A0left0" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f51" type="car" from="bottom0A0" to="B1top1" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f52" type="car" from="bottom1B0" to="B1top1" begin="1800" end="2400" probability="0.050" departLane="best" departSpeed="max"/>
+    <flow id="f53" type="car" from="bottom1B0" to="B0right0" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f54" type="car" from="bottom1B0" to="A0left0" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f55" type="car" from="left0A0" to="B0right0" begin="1800" end="2400" probability="0.060" departLane="best" departSpeed="max"/>
+    <flow id="f56" type="car" from="left0A0" to="B0bottom1" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f57" type="car" from="left0A0" to="B1top1" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f58" type="car" from="left1A1" to="B1right1" begin="1800" end="2400" probability="0.050" departLane="best" departSpeed="max"/>
+    <flow id="f59" type="car" from="left1A1" to="B1top1" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f60" type="car" from="left1A1" to="B0bottom1" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f61" type="car" from="right0B0" to="A0left0" begin="1800" end="2400" probability="0.060" departLane="best" departSpeed="max"/>
+    <flow id="f62" type="car" from="right0B0" to="A0bottom0" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f63" type="car" from="right0B0" to="B0bottom1" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f64" type="car" from="right1B1" to="A1left1" begin="1800" end="2400" probability="0.050" departLane="best" departSpeed="max"/>
+    <flow id="f65" type="car" from="right1B1" to="B1top1" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f66" type="car" from="right1B1" to="A0bottom0" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f67" type="car" from="top0A1" to="A0bottom0" begin="1800" end="2400" probability="0.060" departLane="best" departSpeed="max"/>
+    <flow id="f68" type="car" from="top0A1" to="B0right0" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f69" type="car" from="top0A1" to="A0left0" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f70" type="car" from="top1B1" to="B0bottom1" begin="1800" end="2400" probability="0.050" departLane="best" departSpeed="max"/>
+    <flow id="f71" type="car" from="top1B1" to="B1right1" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+    <flow id="f72" type="car" from="top1B1" to="A1left1" begin="1800" end="2400" probability="0.015" departLane="best" departSpeed="max"/>
+
+</routes>

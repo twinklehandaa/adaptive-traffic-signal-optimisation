@@ -1,0 +1,20 @@
+{
+  "Fixed-Time": {
+    "avg_wait": 291.7272222222222,
+    "avg_wait_std": 57.449733827242284,
+    "avg_queue": 17.51861111111111,
+    "avg_arrived_throughput": 798.3333333333334
+  },
+  "Actuated": {
+    "avg_wait": 298.1194444444444,
+    "avg_wait_std": 101.15690323181418,
+    "avg_queue": 15.912222222222221,
+    "avg_arrived_throughput": 818.3333333333334
+  },
+  "DQN (ours)": {
+    "avg_wait": 19.14541169395874,
+    "avg_wait_std": 0.4742373166090721,
+    "avg_queue": 3.520453094643353,
+    "avg_arrived_throughput": 839.6666666666666
+  }
+}

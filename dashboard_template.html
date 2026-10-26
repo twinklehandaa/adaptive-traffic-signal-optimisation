@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Real-World Intersection — CV + DQN Demo</title>
+<style>
+  :root {
+    --bg: #f7f6f2; --card: #ffffff; --border: #e2e0d8; --border-strong: #c9c6ba;
+    --text: #23221e; --text2: #5c5a52; --text3: #8a8778;
+    --accent: #1f5fd1; --accent-bg: #e6f1fb; --accent-text: #0c447c;
+    --green: #3b6d11; --green-bg: #eaf3de;
+    --red: #a32d2d; --red-bg: #fcebeb;
+    --amber: #854f0b; --amber-bg: #faeeda;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161512; --card: #201f1b; --border: #35332c; --border-strong: #4a473d;
+      --text: #ece9e0; --text2: #b5b2a6; --text3: #85826f;
+      --accent: #85b7eb; --accent-bg: #0c447c; --accent-text: #e6f1fb;
+      --green: #97c459; --green-bg: #27500a;
+      --red: #f09595; --red-bg: #791f1f;
+      --amber: #ef9f27; --amber-bg: #633806;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #161512; --card: #201f1b; --border: #35332c; --border-strong: #4a473d;
+    --text: #ece9e0; --text2: #b5b2a6; --text3: #85826f;
+    --accent: #85b7eb; --accent-bg: #0c447c; --accent-text: #e6f1fb;
+    --green: #97c459; --green-bg: #27500a;
+    --red: #f09595; --red-bg: #791f1f;
+    --amber: #ef9f27; --amber-bg: #633806;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  header { padding: 20px 20px 0; max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
+  .sub { color: var(--text2); font-size: 14px; margin-bottom: 16px; }
+  nav { display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+  nav button {
+    background: none; border: none; padding: 10px 14px; font-size: 14px; color: var(--text2);
+    cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; font-family: inherit;
+  }
+  nav button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  main { max-width: 1100px; margin: 0 auto; padding: 20px; }
+  section { display: none; }
+  section.active { display: block; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .card .label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+  .card .value { font-size: 26px; font-weight: 600; }
+  .card .delta { font-size: 13px; margin-top: 4px; }
+  .delta.good { color: var(--green); }
+  p { line-height: 1.6; color: var(--text2); font-size: 14.5px; }
+  .replay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  @media (max-width: 640px) { .replay-grid { grid-template-columns: 1fr; } }
+  .replay-panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; overflow: hidden; }
+  .replay-panel.before { border-top: 3px solid var(--red); }
+  .replay-panel.after { border-top: 3px solid var(--green); }
+  .panel-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .06em; padding: 3px 10px; border-radius: 10px; margin-bottom: 6px; }
+  .panel-tag.before { background: var(--red-bg); color: var(--red); }
+  .panel-tag.after { background: var(--green-bg); color: var(--green); }
+  .replay-panel h3 { margin: 2px 0 8px; font-size: 15px; font-weight: 600; }
+  canvas { width: 100%; max-width: 340px; aspect-ratio: 1; border-radius: 8px; border: 1px solid var(--border); background: #2a2e33; }
+  .readout { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--text2); margin-top: 8px; padding: 0 4px; }
+  .readout b { color: var(--text); font-weight: 600; }
+  .ba-banner { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin: 16px 0; }
+  .ba-num { text-align: center; }
+  .ba-num .n { font-size: 34px; font-weight: 700; }
+  .ba-num .l { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; }
+  .ba-num.before .n { color: var(--red); }
+  .ba-num.after .n { color: var(--green); }
+  .ba-arrow { font-size: 26px; color: var(--text3); }
+  .ba-pct { font-size: 15px; font-weight: 700; color: var(--green); background: var(--green-bg); padding: 6px 14px; border-radius: 20px; }
+  .explain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; align-items: start; }
+  @media (max-width: 640px) { .explain-grid { grid-template-columns: 1fr; } }
+  .explain-side { display: flex; flex-direction: column; gap: 12px; }
+  .ex-block { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+  .ex-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; font-weight: 600; }
+  .ex-sub { font-size: 12px; color: var(--text3); margin-top: 6px; }
+  .state-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; font-size: 11px; }
+  .state-lane { width: 70px; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; }
+  .state-bar-track { flex: 1; height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; display: flex; }
+  .state-bar-count { height: 100%; background: var(--accent); }
+  .state-bar-queue { height: 100%; background: var(--red); }
+  .action-badge { display: inline-block; font-size: 20px; font-weight: 700; padding: 8px 20px; border-radius: 10px; background: var(--border); color: var(--text2); transition: background .15s, color .15s; }
+  .action-badge.switch { background: var(--amber-bg); color: var(--amber); }
+  .reward-value { font-size: 26px; font-weight: 700; }
+  .reward-value.pos { color: var(--green); }
+  .reward-value.neg { color: var(--red); }
+  .controls { display: flex; align-items: center; gap: 10px; margin: 16px 0; flex-wrap: wrap; }
+  .controls button {
+    background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 8px 16px;
+    font-size: 14px; cursor: pointer; font-family: inherit;
+  }
+  .controls select { padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--card); color: var(--text); font-family: inherit; }
+  input[type=range] { flex: 1; min-width: 120px; }
+  .phase-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .phase-ns { background: var(--green-bg); color: var(--green); }
+  .phase-ew { background: var(--accent-bg); color: var(--accent-text); }
+  .phase-y { background: var(--amber-bg); color: var(--amber); }
+  .result-img { width: 100%; border-radius: 10px; border: 1px solid var(--border); margin: 10px 0; }
+  .result-block { margin-bottom: 28px; }
+  .result-block h3 { font-size: 15px; margin-bottom: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 8px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--text3); font-weight: 600; font-size: 12px; text-transform: uppercase; }
+  .status-pill { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+  .st-done { background: var(--green-bg); color: var(--green); }
+  .st-prog { background: var(--amber-bg); color: var(--amber); }
+  .st-planned { background: var(--border); color: var(--text2); }
+  svg { width: 100%; height: auto; }
+  /* cockpit-style overview */
+  .cockpit-title { text-align: center; font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--text3); padding: 4px 0 14px; text-transform: uppercase; }
+  .signal-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+  .signal-card .sc-label { font-size: 12px; font-weight: 700; letter-spacing: .05em; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; }
+  .signal-box { display: inline-block; padding: 14px 26px; border-radius: 10px; font-size: 18px; font-weight: 700; letter-spacing: .03em; transition: background .2s, color .2s; }
+  .signal-box.sb-green { background: var(--green-bg); color: var(--green); }
+  .signal-box.sb-yellow { background: var(--amber-bg); color: var(--amber); }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+  .stat-cell { text-align: center; }
+  .stat-cell .sv { font-size: 30px; font-weight: 700; line-height: 1.1; }
+  .stat-cell .sl { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; margin-top: 4px; }
+  .live-section-title { font-size: 12px; font-weight: 700; letter-spacing: .06em; color: var(--text3); text-transform: uppercase; margin: 20px 0 10px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .live-canvas-wrap { display: flex; justify-content: center; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+  #canvasOverview { width: 100%; max-width: 300px; aspect-ratio: 1; border-radius: 8px; }
+  .cmp-block { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-top: 10px; }
+  .cmp-title { font-size: 13px; font-weight: 700; color: var(--text2); margin-bottom: 12px; }
+  .cmp-row { display: grid; grid-template-columns: 78px 1fr 70px; align-items: center; gap: 10px; margin-bottom: 9px; font-size: 12.5px; }
+  .cmp-row .cmp-label { color: var(--text2); font-weight: 600; }
+  .cmp-bar-track { height: 16px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .cmp-bar-fill { height: 100%; border-radius: 4px; }
+  .cmp-bar-fill.fixed { background: var(--red); }
+  .cmp-bar-fill.rl { background: var(--accent); }
+  .cmp-row .cmp-val { text-align: right; font-weight: 700; color: var(--text); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Real-World Intersection: CV + DQN Adaptive Signal Control</h1>
+  <div class="sub">Real intersection imported from OpenStreetMap &middot; 25MCA0052 &mdash; Twinkle Handa &middot; honest results, 120-episode run</div>
+  <nav id="tabs"></nav>
+</header>
+
+<main>
+  <section id="overview">
+    <div class="cockpit-title">AI-Based Adaptive Traffic Signal System &middot; Real Intersection (OpenStreetMap)</div>
+
+    <div class="signal-card">
+      <div class="sc-label">Current signal (live, trained DQN)</div>
+      <div id="signalBox" class="signal-box sb-green">GREEN &middot; phase 0</div>
+      <div class="stat-row">
+        <div class="stat-cell"><div class="sv" id="ovVehicles">0</div><div class="sl">Vehicles</div></div>
+        <div class="stat-cell"><div class="sv" id="ovQueue">0</div><div class="sl">Queue</div></div>
+        <div class="stat-cell"><div class="sv" id="ovWait">0.0s</div><div class="sl">Avg wait</div></div>
+      </div>
+    </div>
+
+    <div class="live-section-title">Live intersection (trained DQN in control)</div>
+    <div class="live-canvas-wrap"><canvas id="canvasOverview" width="300" height="300"></canvas></div>
+
+    <div class="live-section-title">Performance comparison (3 seeded runs)</div>
+    <div class="cmp-block">
+      <div class="cmp-title">Average waiting time</div>
+      <div class="cmp-row"><span class="cmp-label">Fixed-Time</span><div class="cmp-bar-track"><div class="cmp-bar-fill fixed" id="barWaitFixed" style="width:0%"></div></div><span class="cmp-val" id="valWaitFixed">0s</span></div>
+      <div class="cmp-row"><span class="cmp-label">RL Control</span><div class="cmp-bar-track"><div class="cmp-bar-fill rl" id="barWaitRl" style="width:0%"></div></div><span class="cmp-val" id="valWaitRl">0s</span></div>
+    </div>
+    <div class="cmp-block">
+      <div class="cmp-title">Throughput (vehicles arrived)</div>
+      <div class="cmp-row"><span class="cmp-label">Fixed-Time</span><div class="cmp-bar-track"><div class="cmp-bar-fill fixed" id="barThruFixed" style="width:0%"></div></div><span class="cmp-val" id="valThruFixed">0</span></div>
+      <div class="cmp-row"><span class="cmp-label">RL Control</span><div class="cmp-bar-track"><div class="cmp-bar-fill rl" id="barThruRl" style="width:0%"></div></div><span class="cmp-val" id="valThruRl">0</span></div>
+    </div>
+
+    <p style="background:var(--amber-bg);color:var(--amber);border-radius:10px;padding:10px 14px;font-size:13.5px;margin-top:16px;"><b>Honest note:</b> the DQN clearly beats naive fixed-time control, but has not yet caught up to this intersection's real, properly-tuned actuated system after only 120 training episodes.</p>
+  </section>
+
+  <section id="howitworks">
+    <p>This is the actual DQN run, replayed with the perception and decision layers made visible: green boxes are what the CV detector sees, the bar panel is the exact state vector fed to the network, and the badge shows the action it picked at each step.</p>
+    <div class="controls">
+      <button id="ehPlayBtn">Play</button>
+      <select id="ehSpeedSel">
+        <option value="2">2x</option>
+        <option value="4" selected>4x</option>
+        <option value="8">8x</option>
+      </select>
+      <input type="range" id="ehScrub" min="0" max="0" value="0">
+      <span id="ehTimeLabel" style="font-size:13px;color:var(--text2);min-width:70px;">t = 0s</span>
+    </div>
+    <div class="explain-grid">
+      <div class="replay-panel" style="border-top:3px solid var(--accent);">
+        <span class="panel-tag" style="background:var(--accent-bg);color:var(--accent-text);">PERCEPTION</span>
+        <h3>CV detection (live)</h3>
+        <canvas id="canvasExplain" width="320" height="320"></canvas>
+        <p style="font-size:12px;margin-top:6px;">Green boxes = vehicles the OpenCV detector has picked up this frame, matched to their lane.</p>
+      </div>
+      <div class="explain-side">
+        <div class="ex-block">
+          <div class="ex-label">State vector (per lane: count / queue)</div>
+          <div id="stateBars"></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-label">Decision (DQN policy)</div>
+          <div id="actionBadge" class="action-badge">HOLD</div>
+          <div class="ex-sub">current signal: <span id="explainPhase"></span></div>
+        </div>
+        <div class="ex-block">
+          <div class="ex-label">Reward this step</div>
+          <div id="rewardValue" class="reward-value">0.0</div>
+          <div class="ex-sub">negative &Delta;wait &minus; 0.25&times;queue + 0.10&times;throughput</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const DATA = __DATA_JSON__;
+const summary = DATA.summary;
+const ROAD_LINES = __ROAD_LINES_JSON__;
+const GREEN_PHASES = __GREEN_PHASES_JSON__;
+
+// ---- tabs ----
+const tabs = [
+  ['overview','Overview'], ['howitworks','How CV + DQN work']
+];
+const nav = document.getElementById('tabs');
+tabs.forEach(([id, label], i) => {
+  const btn = document.createElement('button');
+  btn.textContent = label;
+  btn.className = i === 0 ? 'active' : '';
+  btn.onclick = () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('main section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(id).classList.add('active');
+  };
+  nav.appendChild(btn);
+});
+document.getElementById('overview').classList.add('active');
+
+// ---- fmt helper ----
+function fmt(n) { return Math.round(n * 10) / 10; }
+
+// ---- performance comparison bars (real numbers, scaled to the larger of the two) ----
+(function() {
+  const ft = summary['Fixed-Time'], rl = summary['DQN (ours)'];
+  const maxWait = Math.max(ft.avg_wait, rl.avg_wait);
+  const maxThru = Math.max(ft.avg_arrived_throughput, rl.avg_arrived_throughput);
+  document.getElementById('barWaitFixed').style.width = (ft.avg_wait / maxWait * 100) + '%';
+  document.getElementById('barWaitRl').style.width = (rl.avg_wait / maxWait * 100) + '%';
+  document.getElementById('valWaitFixed').textContent = fmt(ft.avg_wait) + 's';
+  document.getElementById('valWaitRl').textContent = fmt(rl.avg_wait) + 's';
+  document.getElementById('barThruFixed').style.width = (ft.avg_arrived_throughput / maxThru * 100) + '%';
+  document.getElementById('barThruRl').style.width = (rl.avg_arrived_throughput / maxThru * 100) + '%';
+  document.getElementById('valThruFixed').textContent = fmt(ft.avg_arrived_throughput);
+  document.getElementById('valThruRl').textContent = fmt(rl.avg_arrived_throughput);
+})();
+
+// ---- shared data ----
+const dqnFrames = DATA.dqn;
+
+function frameMap(frame) {
+  // {id: [x, y, angle]}
+  const m = new Map();
+  if (!frame) return m;
+  for (const [id, x, y, ang] of frame.v) m.set(id, [x, y, ang]);
+  return m;
+}
+
+function angleLerp(a, b, t) {
+  let d = ((b - a + 540) % 360) - 180;
+  return a + d * t;
+}
+
+function drawRoad(ctx, W, H, scale, cx, cy, phase) {
+  ctx.fillStyle = '#24272b';
+  ctx.fillRect(0, 0, W, H);
+  // real road geometry, extracted from the actual OSM network near the junction
+  ctx.strokeStyle = '#4a4a4a';
+  ROAD_LINES.forEach(pts => {
+    ctx.lineWidth = 9;
+    ctx.beginPath();
+    pts.forEach(([x, y], i) => {
+      const px = cx + x * scale, py = cy - y * scale;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    });
+    ctx.stroke();
+  });
+  ctx.strokeStyle = 'rgba(217,180,41,.55)';
+  ROAD_LINES.forEach(pts => {
+    ctx.lineWidth = 1; ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    pts.forEach(([x, y], i) => {
+      const px = cx + x * scale, py = cy - y * scale;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    });
+    ctx.stroke();
+  });
+  ctx.setLineDash([]);
+  // generic phase indicator (real intersection has 3 phases, not a simple N-S/E-W split)
+  const isGreen = GREEN_PHASES.includes(phase);
+  const color = isGreen ? '#3ecf5e' : '#f2c230';
+  ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(cx, cy, 11, 0, 7); ctx.fill();
+  ctx.fillStyle = color; ctx.beginPath(); ctx.arc(cx, cy, 7, 0, 7); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('ph' + phase, cx, cy + 24);
+}
+
+function drawRoadOld_unused(ctx, W, H, scale, cx, cy, phase) {
+  // asphalt corridors
+  ctx.fillStyle = '#33383e';
+  ctx.fillRect(0, cy - 30*scale, W, 60*scale);
+  ctx.fillRect(cx - 30*scale, 0, 60*scale, H);
+  // curbs
+  ctx.strokeStyle = '#57606a'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(0.5, cy - 30*scale + 0.5, W-1, 60*scale - 1);
+  ctx.strokeRect(cx - 30*scale + 0.5, 0.5, 60*scale - 1, H-1);
+  // lane dividers (dashed yellow center line)
+  ctx.strokeStyle = '#d9b429'; ctx.lineWidth = 1.2; ctx.setLineDash([6, 6]);
+  ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
+  ctx.setLineDash([]);
+  // lane edge lines (white)
+  ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 1;
+  [cy - 30*scale, cy + 30*scale].forEach(yy => { ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(W, yy); ctx.stroke(); });
+  [cx - 30*scale, cx + 30*scale].forEach(xx => { ctx.beginPath(); ctx.moveTo(xx, 0); ctx.lineTo(xx, H); ctx.stroke(); });
+  // crosswalk stripes at the four stop lines
+  ctx.fillStyle = 'rgba(255,255,255,.55)';
+  const sw = 3, gap = 3, cwLen = 24*scale;
+  for (let i = 0; i < cwLen; i += sw+gap) {
+    ctx.fillRect(cx - 30*scale + i, cy - 33*scale, sw, 5);
+    ctx.fillRect(cx - 30*scale + i, cy + 28*scale, sw, 5);
+    ctx.fillRect(cx - 33*scale, cy - 30*scale + i, 5, sw);
+    ctx.fillRect(cx + 28*scale, cy - 30*scale + i, 5, sw);
+  }
+  // traffic signal heads (small box with red/yellow/green lamp) at each approach
+  const nsColor = phase === 0 ? '#3ecf5e' : (phase === 1 ? '#f2c230' : '#e5484d');
+  const ewColor = phase === 2 ? '#3ecf5e' : (phase === 3 ? '#f2c230' : '#e5484d');
+  function lamp(x, y, color) {
+    ctx.fillStyle = '#111'; ctx.fillRect(x-4, y-4, 8, 8);
+    ctx.beginPath(); ctx.arc(x, y, 2.6, 0, 7); ctx.fillStyle = color; ctx.fill();
+  }
+  lamp(cx - 8, cy - 34*scale, nsColor);
+  lamp(cx + 8, cy + 34*scale, nsColor);
+  lamp(cx + 34*scale, cy - 8, ewColor);
+  lamp(cx - 34*scale, cy + 8, ewColor);
+}
+
+function drawCar(ctx, px, py, angleDeg) {
+  ctx.save();
+  ctx.translate(px, py);
+  ctx.rotate(angleDeg * Math.PI / 180);
+  const L = 8, Wd = 4;
+  // shadow
+  ctx.fillStyle = 'rgba(0,0,0,.25)';
+  ctx.beginPath(); ctx.ellipse(0.6, 0.6, Wd/2+0.5, L/2+0.5, 0, 0, 7); ctx.fill();
+  // body
+  ctx.fillStyle = '#d8dde3';
+  ctx.beginPath();
+  ctx.moveTo(0, -L/2);
+  ctx.quadraticCurveTo(Wd/2, -L/2+1.5, Wd/2, -1);
+  ctx.lineTo(Wd/2, L/2-1);
+  ctx.quadraticCurveTo(Wd/2, L/2, 0, L/2);
+  ctx.quadraticCurveTo(-Wd/2, L/2, -Wd/2, L/2-1);
+  ctx.lineTo(-Wd/2, -1);
+  ctx.quadraticCurveTo(-Wd/2, -L/2+1.5, 0, -L/2);
+  ctx.closePath(); ctx.fill();
+  // windshield
+  ctx.fillStyle = '#4a5560';
+  ctx.fillRect(-Wd/2+0.7, -1, Wd-1.4, 2.6);
+  // headlights (front, -y) and taillights (rear, +y)
+  ctx.fillStyle = '#ffe28a';
+  ctx.fillRect(-Wd/2+0.3, -L/2, 1, 1);
+  ctx.fillRect(Wd/2-1.3, -L/2, 1, 1);
+  ctx.fillStyle = '#e5484d';
+  ctx.fillRect(-Wd/2+0.3, L/2-1, 1, 1);
+  ctx.fillRect(Wd/2-1.3, L/2-1, 1, 1);
+  ctx.restore();
+}
+
+function drawScene(canvas, mapCur, mapNext, frac, phase) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  const scale = W / 440;
+  const cx = W / 2, cy = H / 2;
+  drawRoad(ctx, W, H, scale, cx, cy, phase);
+  mapCur.forEach(([x, y, ang], id) => {
+    let px, py, pang;
+    if (mapNext.has(id)) {
+      const [nx, ny, nang] = mapNext.get(id);
+      px = x + (nx - x) * frac; py = y + (ny - y) * frac;
+      pang = angleLerp(ang, nang, frac);
+    } else { px = x; py = y; pang = ang; }
+    const cxp = cx + px * scale, cyp = cy - py * scale;
+    drawCar(ctx, cxp, cyp, pang);
+  });
+}
+
+function phaseLabel(ph) {
+  if (GREEN_PHASES.includes(ph)) return `<span class="phase-badge phase-ns">green (phase ${ph})</span>`;
+  return `<span class="phase-badge phase-y">yellow (phase ${ph})</span>`;
+}
+
+// ==== How CV + DQN work: animated explainer using the real DQN run ====
+const EXPLAIN = __EXPLAIN_DATA_JSON__;
+const exFrames = EXPLAIN.frames, exLanes = EXPLAIN.lanes;
+const exScrub = document.getElementById('ehScrub');
+exScrub.max = exFrames.length - 1;
+let exPlaying = false, exSimTime = 0, exLastTs = 0;
+
+function shortLane(l) { return l.length > 14 ? l.slice(0, 12) + '\u2026' : l; }
+
+// build static bar rows once
+const stateBarsEl = document.getElementById('stateBars');
+exLanes.forEach((lane, i) => {
+  const row = document.createElement('div');
+  row.className = 'state-row';
+  row.innerHTML = `<span class="state-lane" title="${lane}">${shortLane(lane)}</span>
+    <div class="state-bar-track"><div class="state-bar-count" id="cbar${i}" style="width:0%"></div><div class="state-bar-queue" id="qbar${i}" style="width:0%"></div></div>`;
+  stateBarsEl.appendChild(row);
+});
+
+function drawExplainScene(mapCur, mapNext, frac, phase, frameCur) {
+  const canvas = document.getElementById('canvasExplain');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  const scale = W / 440, cx = W / 2, cy = H / 2;
+  drawRoad(ctx, W, H, scale, cx, cy, phase);
+  mapCur.forEach(([x, y, ang], id) => {
+    let px, py, pang;
+    if (mapNext.has(id)) {
+      const [nx, ny, nang] = mapNext.get(id);
+      px = x + (nx - x) * frac; py = y + (ny - y) * frac;
+      pang = angleLerp(ang, nang, frac);
+    } else { px = x; py = y; pang = ang; }
+    const cxp = cx + px * scale, cyp = cy - py * scale;
+    drawCar(ctx, cxp, cyp, pang);
+    // CV "detection" box around each visible vehicle
+    ctx.strokeStyle = '#3ecf5e'; ctx.lineWidth = 1;
+    ctx.strokeRect(cxp - 6, cyp - 6, 12, 12);
+  });
+}
+
+function renderExplain() {
+  const idx = Math.floor(exSimTime), frac = exSimTime - idx;
+  if (!exFrames || exFrames.length === 0) {
+    throw new Error('exFrames is empty or missing \u2014 logs/explain_dqn.json likely has 0 frames.');
+  }
+  const fr = exFrames[Math.min(idx, exFrames.length - 1)];
+  const nextFr = exFrames[Math.min(idx + 1, exFrames.length - 1)];
+  if (!fr) {
+    throw new Error('No frame found at index ' + idx + ' (exFrames.length=' + exFrames.length + ')');
+  }
+  const mapCur = frameMap(fr), mapNext = frameMap(nextFr);
+  drawExplainScene(mapCur, mapNext, idx < exFrames.length - 1 ? frac : 0, fr.ph, fr);
+
+  const maxVal = 20;
+  exLanes.forEach((lane, i) => {
+    const c = Math.min(100, ((fr.counts[i] || 0) / maxVal) * 100);
+    const q = Math.min(100 - c, ((fr.queues[i] || 0) / maxVal) * 100);
+    document.getElementById('cbar' + i).style.width = c + '%';
+    document.getElementById('qbar' + i).style.width = q + '%';
+  });
+
+  const badge = document.getElementById('actionBadge');
+  if (fr.switched) { badge.textContent = 'SWITCH'; badge.classList.add('switch'); }
+  else { badge.textContent = 'HOLD'; badge.classList.remove('switch'); }
+
+  document.getElementById('explainPhase').innerHTML = phaseLabel(fr.ph);
+
+  const rv = document.getElementById('rewardValue');
+  rv.textContent = fr.r.toFixed(1);
+  rv.className = 'reward-value ' + (fr.r >= 0 ? 'pos' : 'neg');
+
+  document.getElementById('ehTimeLabel').textContent = 't = ' + idx + 's';
+  exScrub.value = idx;
+}
+document.getElementById('ehPlayBtn').onclick = () => {
+  exPlaying = !exPlaying;
+  document.getElementById('ehPlayBtn').textContent = exPlaying ? 'Pause' : 'Play';
+  if (exPlaying) { exLastTs = performance.now(); requestAnimationFrame(exLoop); }
+};
+exScrub.addEventListener('input', () => { exSimTime = parseInt(exScrub.value); safeRenderExplain(); });
+
+function exLoop(ts) {
+  if (!exPlaying) return;
+  const dt = (ts - exLastTs) / 1000;
+  exLastTs = ts;
+  const speed = parseInt(document.getElementById('ehSpeedSel').value) || 1;
+  const nextTime = exSimTime + dt * speed;
+  exSimTime = Number.isFinite(nextTime) ? Math.min(nextTime, exFrames.length - 1) : exSimTime;
+  safeRenderExplain();
+  if (exSimTime >= exFrames.length - 1) { exPlaying = false; document.getElementById('ehPlayBtn').textContent = 'Play'; return; }
+  requestAnimationFrame(exLoop);
+}
+
+function safeRenderExplain() {
+  try {
+    renderExplain();
+  } catch (e) {
+    exPlaying = false;
+    document.getElementById('ehPlayBtn').textContent = 'Play';
+    document.getElementById('ehTimeLabel').textContent = 'error';
+    let dbg = document.getElementById('dbgErrorExplain');
+    if (!dbg) {
+      dbg = document.createElement('pre');
+      dbg.id = 'dbgErrorExplain';
+      dbg.style.cssText = 'white-space:pre-wrap;font-size:11px;color:#e5484d;background:var(--red-bg);padding:8px;border-radius:8px;margin-top:8px;';
+      document.getElementById('howitworks').appendChild(dbg);
+    }
+    dbg.textContent = 'JS error at exSimTime=' + exSimTime + ' (exFrames.length=' + exFrames.length + '): '
+      + e.message + '\n' + (e.stack || '');
+  }
+}
+safeRenderExplain();
+
+// ==== Overview tab: always-on live cockpit loop (loops the real DQN run) ====
+let ovSimTime = 0, ovLastTs = null;
+
+function renderOverview() {
+  const idx = Math.floor(ovSimTime) % dqnFrames.length;
+  const nextIdx = (idx + 1) % dqnFrames.length;
+  const frac = ovSimTime - Math.floor(ovSimTime);
+  const fr = dqnFrames[idx], nextFr = dqnFrames[nextIdx];
+  if (!fr) return;
+
+  const canvas = document.getElementById('canvasOverview');
+  drawScene(canvas, frameMap(fr), frameMap(nextFr), frac, fr.ph);
+
+  const isGreen = GREEN_PHASES.includes(fr.ph);
+  const box = document.getElementById('signalBox');
+  box.textContent = (isGreen ? 'GREEN' : 'YELLOW') + ' \u00b7 phase ' + fr.ph;
+  box.className = 'signal-box ' + (isGreen ? 'sb-green' : 'sb-yellow');
+
+  document.getElementById('ovVehicles').textContent = fr.v.length;
+  document.getElementById('ovQueue').textContent = fr.q;
+  document.getElementById('ovWait').textContent = fr.w.toFixed(1) + 's';
+}
+
+function ovLoop(ts) {
+  if (ovLastTs === null) ovLastTs = ts;
+  const dt = (ts - ovLastTs) / 1000;
+  ovLastTs = ts;
+  ovSimTime += dt * 6; // fixed, moderate playback speed for the ambient cockpit view
+  if (ovSimTime >= dqnFrames.length) ovSimTime -= dqnFrames.length; // loop forever
+  try { renderOverview(); } catch (e) { /* ambient view: fail silently, main tabs still work */ }
+  requestAnimationFrame(ovLoop);
+}
+requestAnimationFrame(ovLoop);
+</script>
+</body>
+</html>
